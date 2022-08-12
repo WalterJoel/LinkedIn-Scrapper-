@@ -1,3 +1,4 @@
+import { getCookie } from '../utils/cookie';
 import {$, $$}  from '../utils/selector';
 import { profileSelectors  } from '../config/scrapperSelector';
 import axios from "axios";
@@ -16,14 +17,6 @@ function getEspecificInfo (selector){
     })
     return titles
   }
-  function getToken(tokenKey){
-    return document.cookie
-    .split(';')
-    .find(cookie => cookie.includes(tokenKey))
-    .replace(tokenKey+'=','') //reemplazo tokenkye= por un espacio nada
-    .replaceAll('"','')
-    .trim()
-  }
 
   //Para cargar la pagina uso el link corto
   
@@ -33,7 +26,7 @@ function getEspecificInfo (selector){
 
   async function getContacInfo(){
     try {
-          const token = getToken('JSESSIONID') //Obtengo el token de la sesion actual, JSESSIONID lo saco al ver network en la consola de cjrome
+          const token = getCookie('JSESSIONID') //Obtengo el token de la sesion actual, JSESSIONID lo saco al ver network en la consola de cjrome
       //Si no esta en un perfil no va encontrar por eso da error
       const [contactInfoName] = $(profileSelectors.contactInfo).href.match(/in\/.+\/o/g) ?? []
       const contactInfoURL = `https://www.linkedin.com/voyager/api/identity/profiles${contactInfoName.slice(2,-2)}/profileContactInfo`
@@ -89,11 +82,9 @@ function getEspecificInfo (selector){
       console.log('ya imprimi el perfil espere el scrolleo')
       // eslint-disable-next-line no-undef
       
-      const port = chrome.runtime.connect({ name: 'secureChannelScrapProfile' });
-      //Aqui descomento joel
-      //const port = chrome.runtime.connect({ name: 'secureChannelScrap' });
-      //console.log('tabid con get',tab);
-      port.postMessage({profile });
+      const port = chrome.runtime.connect();
+      const name = 'INFO-PERFILES';
+      port.postMessage({profile,name });
       console.log('pase mensaje')
   
     } catch (error) {
@@ -101,26 +92,6 @@ function getEspecificInfo (selector){
       console.log('🚀 ~ file: scrapper.js ~ line 68 ~ scrap ~ error', error);
       
     }
-    
-    //const name = $('h1').textContent
-
-    /*const name             = $(profileSelectors.name).textContent
-    
-    const experienceTitles = getEspecificInfo(profileSelectors.experiencesElements)
-    const educationTitles  = getEspecificInfo(profileSelectors.educationElements)
-    const contactInfo      = await getContacInfo()
-    const profile = {
-      name,
-      contactInfo,
-      experienceTitles,
-      educationTitles
-    }
-    console.log(profile)
-    //Conectamos
-    //const port = chrome.runtime.connect({ name: 'pruebaya' }); 
-    const port = chrome.runtime.connect({ name: 'pruebaya' }); 
-    //Aqui envio un mensaje con todo el perfil  
-    port.postMessage({profile});*/
 
   }
     

@@ -1,4 +1,5 @@
 import FetchService from './service/fetchService';
+import { ListEnumFetch } from './constants';
 
 //Esta funcion elimina el tab antiguo y obtiene el nuevo idTab a partir de la nueva URL
 export async function deleteAndCreateTab(oldId, url) {
@@ -16,17 +17,38 @@ export async function deleteAndCreateTab(oldId, url) {
   }
 
 }
+function saveInfoCandidates(infoProfile){
+  FetchService.createUrlProfiles(infoProfile,ListEnumFetch.GUARDAR_PERFILES).catch(async err => {
+    console.log(err);
+      //Asi agrego items en adelante
+      /*db.urlsCandidate.add({
+        urls : urlsCandidates
+      });*/
+  });
+
+}
+function saveUrlsCandidates (urlsCandidates) {
+  if(!urlsCandidates.length) throw new Error('Not enough data');
+  // Si falla el servicio remoto, guardar localmente en indexDB
+  FetchService.createUrlProfiles(urlsCandidates,ListEnumFetch.GUARDAR_URLS).catch(async err => {
+    console.log(err);
+  });
+}
 
   // 1.- Primer evento que se realiza al hacer click en el navegador
   chrome.action.onClicked.addListener((tab) => {
+    // Se ejecuta la consulta "FullStack"
+    chrome.scripting.executeScript({
+      target : {tabId:  tab.id},
+      files  : ["scripts/scrapCandidates.js"],
+    })
+    // Se ejecuta el scrapping
     chrome.scripting.executeScript({
         target : {tabId:  tab.id},
         files  : ["scripts/scrapper.js"],
     })
-    console.log('tab_url ONCLICKED',tab.url);
-    console.log('tab_id ONCLICKED',tab.id);
   });
-//CTRL + ALT +L y genera el console log 
+
   const arrayss = ['https://www.linkedin.com/in/rodrigo-santa-cruz-ortega-5981a315a/',
                    'https://www.linkedin.com/in/wilmerdelgadoalama/',
                    'https://www.linkedin.com/in/walter-joel-valdivia-bejarano-72955488/',
@@ -38,31 +60,25 @@ export async function deleteAndCreateTab(oldId, url) {
     //Conecto y yasssss
     console.log('ya conecte');
     console.log(port.sender.tab.id)
-
     port.onMessage.addListener(unafuncion);
 
-    /*port.onMessage.addListener(function(request, sender, port){
-      console.log(sender.tab.id,port)
-      recorrerPerfiles(sender.tab.id)
-    });*/
     return recorrerPerfiles(port.sender.tab.id);
 
   });
 
   const unafuncion = async(port) => {
-    // 1.-Guardo en la Base de datos el perfil actual
-    FetchService.createUrlProfiles(port.profile).catch(async err => {
-      console.log(err);
-      //Asi agrego items en adelante
-      /*db.urlsCandidate.add({
-        urls : urlsCandidates
-      });*/
-    });
-    // 2.- 
-    console.log('en la funcion');
-    
-    console.log('profile en function',port.profile);
-    //recorrerPerfiles(port.tabID)
+    console.log('pORT', port);
+    console.log('pORT SENDER', port.name);
+    if(port.name == 'URL-PERFILES'){
+      console.log('guardando perfiles')
+      saveUrlsCandidates(port.urlsCandidates);
+    }
+    else if(port.name == 'INFO-PERFILES'){
+      saveInfoCandidates(port.profile); 
+      console.log('en la funcion');
+      console.log('profile en function',port.profile);
+    } 
+
   }
 
 //Funcion que salta de perfil en perfil
