@@ -1,15 +1,3 @@
-/*chrome.action.onClicked.addListener(() => {
-    console.log("hola joel")
-  });*/
-
-/*Segunda version, inyecta script sobre la pagina que nos encontremos*/
-//Ojo todo de aqui se inprime en el devtOOLS del service worker
-async function getCurrentTab() {
-  let queryOptions = { active: true, lastFocusedWindow: true };
-  // `tab` will either be a `tabs.Tab` instance or `undefined`.
-  let [tab] = await chrome.tabs.query(queryOptions);
-  return tab;
-}
 //Esta funcion elimina el tab antiguo y obtiene el nuevo idTab a partir de la nueva URL
 export async function deleteAndCreateTab(oldId, url) {
   try {
@@ -26,22 +14,7 @@ export async function deleteAndCreateTab(oldId, url) {
   }
 
 }
-  let GRANDE
-  function probandoScrap(tabid){
-      console.log('tabID en sw', tabid)
-      const port = chrome.runtime.connect({ name: tabid.toString() });
-      port.postMessage({});
-  }
 
-  /*chrome.action.onClicked.addListener((tab) => {
-    chrome.scripting.executeScript({
-        target : {tabId:  tab.id},
-        func: probandoScrap,
-        args  : [tab.id]
-    })
-    console.log('id del onclick', tab.id)
- 
-  });*/
   // 1.- Primer evento que se realiza al hacer click en el navegador
   chrome.action.onClicked.addListener((tab) => {
     chrome.scripting.executeScript({
@@ -54,7 +27,10 @@ export async function deleteAndCreateTab(oldId, url) {
 //CTRL + ALT +L y genera el console log 
   const arrayss = ['https://www.linkedin.com/in/rodrigo-santa-cruz-ortega-5981a315a/',
                    'https://www.linkedin.com/in/wilmerdelgadoalama/',
-                   'https://www.linkedin.com/in/walter-joel-valdivia-bejarano-72955488/']
+                   'https://www.linkedin.com/in/walter-joel-valdivia-bejarano-72955488/',
+                  'https://www.linkedin.com/in/erick-pinglo-mayta-a2a066168',
+                 'https://www.linkedin.com/in/joelvizcarra',
+                'https://www.linkedin.com/in/alcibar-vasquez']
   //Una accion conectar que es enviada desde el scrapper
   chrome.runtime.onConnect.addListener((port)=> {
     //Conecto y yasssss
@@ -70,14 +46,7 @@ export async function deleteAndCreateTab(oldId, url) {
     return recorrerPerfiles(port.sender.tab.id);
 
   });
-  /*
-  chrome.runtime.onConnect.addListener((port)=> {
-    //Conecto y yasssss
-    console.log('ya conecte');
-    console.log('tabID de retorno',port.name);
-    port.onMessage.addListener(unafuncion);
 
-  })*/  
   const unafuncion = async(port) => {
     // 1.-Guardo en la Base de datos el perfil actual
 
@@ -93,7 +62,12 @@ export async function deleteAndCreateTab(oldId, url) {
     console.log('entro a recorer perfiles')
     
     console.log('get current and ol tabid',tabID);
+    //Compruebo que mi array aun tenga datos
+    if(!arrayss.length) throw new Error('Not enough data');
+    //Elimino el tab antiguo y obtengo uno nuevo a partir del link del perfil
     const newTabId = await deleteAndCreateTab(tabID, arrayss[0]);
+    //Esta funcion shift() elimina el primer elemento del array, por eso siempre busco en array 0
+    arrayss.shift();
     console.log('nuevo idtab retorno de delete and create',newTabId);
     return await iterar('scripts/scrapper.js',newTabId)
     
