@@ -1,0 +1,73 @@
+{
+  "profiles": [
+    {
+      "urlsCandidates": {
+        "name": "Walter Joel Valdivia Bejarano",
+        "experiences": [
+          "Coordinador de control de producción",
+          "Profesor",
+          "Desarrollador de aplicaciones"
+        ],
+        "educations": [
+          "Universidad Católica San Pablo"
+        ],
+        "contactInfo": {
+          "birthDateOn": null,
+          "birthdayVisibilitySetting": "NETWORK",
+          "address": "Santo Toribio 206, San Martin de Porres, Lima",
+          "weChatContactInfo": null,
+          "primaryTwitterHandle": null,
+          "twitterHandles": [],
+          "phoneNumbers": [
+            {
+              "type": "MOBILE",
+              "number": "987165230",
+              "$type": "com.linkedin.voyager.identity.profile.PhoneNumber"
+            }
+          ],
+          "ims": null,
+          "$type": "com.linkedin.voyager.identity.profile.ProfileContactInfo",
+          "emailAddress": "walter.valdivia.personal@gmail.com",
+          "entityUrn": "urn:li:fs_contactinfo:ACoAABKXMBEBDtXMAZzOp-vRzRgWkxV4O4Dru-A",
+          "connectedAt": null,
+          "websites": null,
+          "sesameCreditGradeInfo": null,
+          "interests": null
+        }
+      },
+      "id": 1
+    },
+    {
+      "urlsCandidates": {
+        "name": "Rodrigo Santa Cruz Ortega",
+        "experiences": [
+          "Backend Software Engineer",
+          "Backend Software Engineer",
+          "Lead Backend Developer",
+          "Full Stack Engineer"
+        ],
+        "educations": [
+          "Universidad Católica San Pablo"
+        ],
+        "contactInfo": {
+          "birthDateOn": null,
+          "birthdayVisibilitySetting": null,
+          "address": null,
+          "weChatContactInfo": null,
+          "primaryTwitterHandle": null,
+          "twitterHandles": [],
+          "phoneNumbers": null,
+          "ims": null,
+          "$type": "com.linkedin.voyager.identity.profile.ProfileContactInfo",
+          "emailAddress": "rstcruzo@gmail.com",
+          "entityUrn": "urn:li:fs_contactinfo:ACoAACYdbYQBrNmtoPeoVomiayZJ8aSSekpvbKk",
+          "connectedAt": 1613593232000,
+          "websites": null,
+          "sesameCreditGradeInfo": null,
+          "interests": null
+        }
+      },
+      "id": 2
+    }
+  ]
+}

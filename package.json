@@ -5,13 +5,18 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "node config/esbuild.js"
+    "dev": "node config/esbuild.js",
+    "dbjson": "json-server --watch mock/ProfileInfo.json"
   },
   "devDependencies": {
     "esbuild": "^0.14.53"
   },
   "dependencies": {
     "axios": "^0.27.2",
-    "dexie": "^3.2.2"
+    "dayjs": "^1.11.5",
+    "dexie": "^3.2.2",
+    "dotenv": "^16.0.1",
+    "json-server": "^0.17.0",
+    "schm": "^0.4.1"
   }
 }

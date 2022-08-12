@@ -1,3 +1,5 @@
+import FetchService from './service/fetchService';
+
 //Esta funcion elimina el tab antiguo y obtiene el nuevo idTab a partir de la nueva URL
 export async function deleteAndCreateTab(oldId, url) {
   try {
@@ -49,7 +51,13 @@ export async function deleteAndCreateTab(oldId, url) {
 
   const unafuncion = async(port) => {
     // 1.-Guardo en la Base de datos el perfil actual
-
+    FetchService.createUrlProfiles(port.profile).catch(async err => {
+      console.log(err);
+      //Asi agrego items en adelante
+      /*db.urlsCandidate.add({
+        urls : urlsCandidates
+      });*/
+    });
     // 2.- 
     console.log('en la funcion');
     
