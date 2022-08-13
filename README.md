@@ -9,8 +9,14 @@ yarn
 ```bash 
 yarn dev 
 ```
-## Finalmente copiar el archivo manifest.json dentro de la carpeta dist
+## Luego copiar el archivo manifest.json dentro de la carpeta dist
 ```bash 
 ojo la carpeta dist se genera una vez lanzado el comando yarn dev
+```
+
+
+## Finalmente dejar ejecutando el siguiente comando para que el servidor escuche y pueda guardar datos en la BD local
+```bash 
+yarn dbjson
 ```
 <img src="https://krowdy.s3.amazonaws.com/company/5d49adea2405ee002a2b5265/2021-05-13T12-42-20-224ZIsotipo_krowdy.png"  class="center"/>
