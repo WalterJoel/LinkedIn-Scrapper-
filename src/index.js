@@ -1,6 +1,5 @@
 import FetchService from './service/fetchService';
 import { ListEnumFetch } from './constants';
-
 //Esta funcion elimina el tab antiguo y obtiene el nuevo idTab a partir de la nueva URL
 export async function deleteAndCreateTab(oldId, url) {
   try {
@@ -27,7 +26,23 @@ function saveInfoCandidates(infoProfile){
   });
 
 }
-function saveUrlsCandidates (urlsCandidates) {
+const array_sayu=[];
+
+async function fillArray(data){
+ /* let a = FetchService.getUrlProfiles(  ).catch(async err => {
+    console.log(err);
+  });
+  console.log(a)
+  return a;*/
+  const size= data.length;
+  let cont = 0;
+  while(cont<size){
+    array_sayu.push(data[cont].profileVar)
+    cont++;
+  }
+  console.log(array_sayu);
+}
+async function saveUrlsCandidates (urlsCandidates) {
   if(!urlsCandidates.length) throw new Error('Not enough data');
   // Si falla el servicio remoto, guardar localmente en indexDB
   FetchService.createUrlProfiles(urlsCandidates,ListEnumFetch.GUARDAR_URLS).catch(async err => {
@@ -56,14 +71,14 @@ function saveUrlsCandidates (urlsCandidates) {
                  'https://www.linkedin.com/in/joelvizcarra',
                 'https://www.linkedin.com/in/alcibar-vasquez']
   //Una accion conectar que es enviada desde el scrapper
-  chrome.runtime.onConnect.addListener((port)=> {
-    //Conecto y yasssss
+  let actualID=0;
+  chrome.runtime.onConnect.addListener((port  )=> {
     console.log('ya conecte');
     console.log(port.sender.tab.id)
+    actualID = port.sender.tab.id;
     port.onMessage.addListener(unafuncion);
-
-    return recorrerPerfiles(port.sender.tab.id);
-
+    console.log('port aqui',port)
+    //return  recorrerPerfiles(port.sender.tab.id);
   });
 
   const unafuncion = async(port) => {
@@ -71,43 +86,40 @@ function saveUrlsCandidates (urlsCandidates) {
     console.log('pORT SENDER', port.name);
     if(port.name == 'URL-PERFILES'){
       console.log('guardando perfiles')
-      saveUrlsCandidates(port.urlsCandidates);
+      await saveUrlsCandidates(port.urlsCandidates);
+      await fillArray(port.urlsCandidates);
+      console.log('solo una vez entro')
+
     }
     else if(port.name == 'INFO-PERFILES'){
+      //Guardo en un array los datos y los trato
+      console.log('arrau_sayu',array_sayu);
+      recorrerPerfiles(actualID);
       saveInfoCandidates(port.profile); 
       console.log('en la funcion');
       console.log('profile en function',port.profile);
     } 
-
   }
 
 //Funcion que salta de perfil en perfil
   export async function recorrerPerfiles(tabID){
     console.log('entro a recorer perfiles')
-    
-    console.log('get current and ol tabid',tabID);
     //Compruebo que mi array aun tenga datos
+    
     if(!arrayss.length) throw new Error('Not enough data');
+    //if(!arrayss.length) throw new Error('Not enough data');
     //Elimino el tab antiguo y obtengo uno nuevo a partir del link del perfil
-    const newTabId = await deleteAndCreateTab(tabID, arrayss[0]);
+    //const newTabId = await deleteAndCreateTab(tabID, arrayss[0]);
+    console.log('dato', array_sayu[0]);
+    const newTabId = await deleteAndCreateTab(tabID, 'https://'+array_sayu[0]);
     //Esta funcion shift() elimina el primer elemento del array, por eso siempre busco en array 0
-    arrayss.shift();
+    //arrayss.shift();
+    array_sayu.shift();
     console.log('nuevo idtab retorno de delete and create',newTabId);
     return await iterar('scripts/scrapper.js',newTabId)
-    
-    /*let a = 0;
-    while(a<2){
-      const newTabId = await deleteAndCreateTab(tabinicial, arrayss[a]);
-    
-      chrome.scripting.executeScript({
-        target : {tabId:  newTabId},
-        files  : ["scripts/scrapper.js"]
-      })
-      tabinicial = newTabId;
-      a=a+1;
-
-    }*/
+   
   }
+
   export async function iterar(path,tabId){
     const options = {
       target: { tabId },
@@ -115,5 +127,3 @@ function saveUrlsCandidates (urlsCandidates) {
     }
     chrome.scripting.executeScript(options);
   }
-
-  

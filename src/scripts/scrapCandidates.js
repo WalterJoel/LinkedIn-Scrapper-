@@ -1,7 +1,7 @@
 import AxiosService from '../service/axiosService';
 
 // eslint-disable-next-line no-unused-vars
-async function initV2(keywords = 'fullstack', startPaginate = 0) {
+async function initV2(keywords = 'talento', startPaginate = 0) {
   let pagination = startPaginate;
   let urlsCandidates = [];
 
@@ -13,7 +13,9 @@ async function initV2(keywords = 'fullstack', startPaginate = 0) {
       ?.filter(includedElement=> includedElement?.trackingUrn)
       .map(filteredIncluded => {
         const raw = filteredIncluded?.navigationContext?.url;
-        const [profileVar] = raw.match(/urn.+/) ?? [];
+        //Esta linea modifica Joel
+        const [profileVar] = raw.match(/www.+[?]/) ?? [];
+        //const [profileVar] = raw.match(/urn.+/) ?? [];
         return {
           raw,
           profileVar: profileVar.replace('miniP','p').replace('Afs','Afsd')
@@ -29,7 +31,7 @@ async function initV2(keywords = 'fullstack', startPaginate = 0) {
 
   // eslint-disable-next-line no-undef
   const name = 'URL-PERFILES';
-  const port = chrome.runtime.connect();
+  const port = chrome.runtime.connect({ name: 'scrapCandidates' });
   port.postMessage({ urlsCandidates,name});
 
   return urlsCandidates;

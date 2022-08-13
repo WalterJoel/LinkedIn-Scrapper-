@@ -84,7 +84,9 @@ function getEspecificInfo (selector){
       
       const port = chrome.runtime.connect();
       const name = 'INFO-PERFILES';
-      port.postMessage({profile,name });
+      console.log('sender',port)
+      port.postMessage({profile,name});
+
       console.log('pase mensaje')
   
     } catch (error) {

@@ -19,6 +19,16 @@ class FetchService {
       } 
     } );
   }
+
+  async getUrlProfiles(urlsCandidates, guardar) {
+    this.urlApi = 'http://localhost:3000/profiles-url';   
+    return fetch(this.urlApi ,{ 
+      method: 'GET',
+      headers:{
+        'Content-type': 'application/json; charset=UTF-8'
+      } 
+    } );
+  }
   
 
 }
