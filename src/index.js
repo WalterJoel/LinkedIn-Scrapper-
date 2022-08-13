@@ -72,28 +72,22 @@ async function saveUrlsCandidates (urlsCandidates) {
       console.log('guardando perfiles')
       await saveUrlsCandidates(port.urlsCandidates);
       await fillArray(port.urlsCandidates);
-      console.log('solo una vez entro')
 
     }
     else if(port.name == 'INFO-PERFILES'){
       //Guardo en un array los datos y los trato
       recorrerPerfiles(actualID);
       saveInfoCandidates(port.profile); 
-      console.log('en la funcion');
-      console.log('profile en function',port.profile);
     } 
   }
 
 //Funcion que salta de perfil en perfil
   export async function recorrerPerfiles(tabID){
-    console.log('entro a recorer perfiles')
     //Compruebo que mi array aun tenga datos
     if(!array_sayu.length) throw new Error('Not enough data');
-    console.log('dato', array_sayu[0]);
     const newTabId = await deleteAndCreateTab(tabID, 'https://'+array_sayu[0]);
     //Esta funcion shift() elimina el primer elemento del array, por eso siempre busco en array 0
     array_sayu.shift();
-    console.log('nuevo idtab retorno de delete and create',newTabId);
     return await iterar('scripts/scrapper.js',newTabId)
    
   }

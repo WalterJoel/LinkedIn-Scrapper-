@@ -74,15 +74,13 @@ function getEspecificInfo (selector){
         contactInfo,  
       };
       console.log(profile);
-      console.log('ya imprimi el perfil espere el scrolleo')
+
       // eslint-disable-next-line no-undef
       
       const port = chrome.runtime.connect();
       const name = 'INFO-PERFILES';
       console.log('sender',port)
       port.postMessage({profile,name});
-
-      console.log('pase mensaje')
   
     } catch (error) {
       // eslint-disable-next-line no-console

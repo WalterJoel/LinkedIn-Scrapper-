@@ -1,7 +1,8 @@
 import AxiosService from '../service/axiosService';
+import { ListEnumSearch} from '../constants';
 
 // eslint-disable-next-line no-unused-vars
-async function initV2(keywords = 'talento', startPaginate = 0) {
+async function initV2(keywords = ListEnumSearch.SEARCH_KEYWORD, startPaginate = 0) {
   let pagination = startPaginate;
   let urlsCandidates = [];
 

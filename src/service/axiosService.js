@@ -32,7 +32,7 @@ class AxiosService {
   }
 
   async getPaginate10Results(
-    keywords = 'talento',
+    keywords = ListEnumSearch.SEARCH_KEYWORD,
     startPaginate = 0, 
     list = ListEnumSearch.PEOPLE, 
     includeFilter = false, 

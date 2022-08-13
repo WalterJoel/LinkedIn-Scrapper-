@@ -1,5 +1,6 @@
 export const ListEnumSearch = {
-  PEOPLE: 'PEOPLE'
+  PEOPLE: 'PEOPLE',
+  SEARCH_KEYWORD: 'fullstack'
 };
 
 export const ProfileCardEnum  = {
