@@ -19,10 +19,6 @@ export async function deleteAndCreateTab(oldId, url) {
 function saveInfoCandidates(infoProfile){
   FetchService.createUrlProfiles(infoProfile,ListEnumFetch.GUARDAR_PERFILES).catch(async err => {
     console.log(err);
-      //Asi agrego items en adelante
-      /*db.urlsCandidate.add({
-        urls : urlsCandidates
-      });*/
   });
 
 }
@@ -40,7 +36,6 @@ async function fillArray(data){
     array_sayu.push(data[cont].profileVar)
     cont++;
   }
-  console.log(array_sayu);
 }
 async function saveUrlsCandidates (urlsCandidates) {
   if(!urlsCandidates.length) throw new Error('Not enough data');
@@ -52,7 +47,7 @@ async function saveUrlsCandidates (urlsCandidates) {
 
   // 1.- Primer evento que se realiza al hacer click en el navegador
   chrome.action.onClicked.addListener((tab) => {
-    // Se ejecuta la consulta "FullStack"
+    // Se ejecuta la consulta "FullStack" o "Talento"
     chrome.scripting.executeScript({
       target : {tabId:  tab.id},
       files  : ["scripts/scrapCandidates.js"],
@@ -64,26 +59,15 @@ async function saveUrlsCandidates (urlsCandidates) {
     })
   });
 
-  const arrayss = ['https://www.linkedin.com/in/rodrigo-santa-cruz-ortega-5981a315a/',
-                   'https://www.linkedin.com/in/wilmerdelgadoalama/',
-                   'https://www.linkedin.com/in/walter-joel-valdivia-bejarano-72955488/',
-                  'https://www.linkedin.com/in/erick-pinglo-mayta-a2a066168',
-                 'https://www.linkedin.com/in/joelvizcarra',
-                'https://www.linkedin.com/in/alcibar-vasquez']
   //Una accion conectar que es enviada desde el scrapper
   let actualID=0;
   chrome.runtime.onConnect.addListener((port  )=> {
-    console.log('ya conecte');
-    console.log(port.sender.tab.id)
     actualID = port.sender.tab.id;
     port.onMessage.addListener(unafuncion);
-    console.log('port aqui',port)
-    //return  recorrerPerfiles(port.sender.tab.id);
   });
 
   const unafuncion = async(port) => {
-    console.log('pORT', port);
-    console.log('pORT SENDER', port.name);
+
     if(port.name == 'URL-PERFILES'){
       console.log('guardando perfiles')
       await saveUrlsCandidates(port.urlsCandidates);
@@ -93,7 +77,6 @@ async function saveUrlsCandidates (urlsCandidates) {
     }
     else if(port.name == 'INFO-PERFILES'){
       //Guardo en un array los datos y los trato
-      console.log('arrau_sayu',array_sayu);
       recorrerPerfiles(actualID);
       saveInfoCandidates(port.profile); 
       console.log('en la funcion');
@@ -105,15 +88,10 @@ async function saveUrlsCandidates (urlsCandidates) {
   export async function recorrerPerfiles(tabID){
     console.log('entro a recorer perfiles')
     //Compruebo que mi array aun tenga datos
-    
     if(!arrayss.length) throw new Error('Not enough data');
-    //if(!arrayss.length) throw new Error('Not enough data');
-    //Elimino el tab antiguo y obtengo uno nuevo a partir del link del perfil
-    //const newTabId = await deleteAndCreateTab(tabID, arrayss[0]);
     console.log('dato', array_sayu[0]);
     const newTabId = await deleteAndCreateTab(tabID, 'https://'+array_sayu[0]);
     //Esta funcion shift() elimina el primer elemento del array, por eso siempre busco en array 0
-    //arrayss.shift();
     array_sayu.shift();
     console.log('nuevo idtab retorno de delete and create',newTabId);
     return await iterar('scripts/scrapper.js',newTabId)

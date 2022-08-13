@@ -18,11 +18,6 @@ function getEspecificInfo (selector){
     return titles
   }
 
-  //Para cargar la pagina uso el link corto
-  
-  
-  //Pero para sacar datos uso el link que contiene el voyager
-
 
   async function getContacInfo(){
     try {
