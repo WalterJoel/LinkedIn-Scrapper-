@@ -88,7 +88,7 @@ async function saveUrlsCandidates (urlsCandidates) {
   export async function recorrerPerfiles(tabID){
     console.log('entro a recorer perfiles')
     //Compruebo que mi array aun tenga datos
-    if(!arrayss.length) throw new Error('Not enough data');
+    if(!array_sayu.length) throw new Error('Not enough data');
     console.log('dato', array_sayu[0]);
     const newTabId = await deleteAndCreateTab(tabID, 'https://'+array_sayu[0]);
     //Esta funcion shift() elimina el primer elemento del array, por eso siempre busco en array 0
